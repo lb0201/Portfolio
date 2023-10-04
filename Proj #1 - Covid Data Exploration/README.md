@@ -18,7 +18,7 @@ This in-depth project delves into the field of COVID-19 data analytics, employin
 3. Exploratory Data Analysis (EDA) - Utilized SQL queries to conduct exploratory data analysis, leading to the discovery of significant insights regarding the distribution and patterns of COVID-19.
 4. Data Visualization - Processed and transformed data into Tableau dashboards that offer dynamic visual insights, effectively showcasing valuable patterns and trends within the dataset.
 
-## Files Used
+## Files 
 
 * CovidDeaths.xlsx
 * CovidVaccinations.xlsx
