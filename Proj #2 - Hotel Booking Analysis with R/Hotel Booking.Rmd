@@ -1,0 +1,144 @@
+---
+title: "Hotel Booking Analysis"
+author: "Brian Lim"
+date: "2023-09-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+## The Scenario
+
+Our objective is to provide valuable insights to a hotel manager who is planning a family-friendly promotion to boost bookings. We aim to assist in optimizing the promotion's timing and marketing strategy. This will help maximize bookings and revenue for the upcoming season. I will address the stakeholder's request by conducting a thorough analysis and generating visual illustrations to effectively communicate my findings.
+
+#### Questions: 
+
+1. How does the lead time for hotel bookings correlate with the number of children accompanying guests?
+
+2. Stakeholder wants to run a family-friendly promotion targeting key market segments. She wants to know which market segments generate the largest number of bookings, and where these bookings are made (city hotels or resort hotels).
+
+3. Your stakeholder asks if you can create a plot that shows the relationship between lead time and guests traveling with children for online bookings at city hotels. This will give her a better idea of the specific timing for the promotion.
+
+##### Import dataset
+
+```{r load data}
+hotel_bookings <- read.csv("hotel_bookings.csv")
+```
+
+##### Viewing the first few rows and columns of the dataset
+
+```{r look at data}
+head(hotel_bookings)
+```
+
+```{r look at column names}
+colnames(hotel_bookings)
+```
+
+<br> 
+
+#### Install and load libraries
+
+```{r installing packages, echo=FALSE, message=FALSE}
+install.packages('ggplot2')
+install.packages('tidyverse')
+install.packages("dplyr")
+```
+
+```{r Loading packages}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+
+<br> 
+
+### Exploratory Data Analysis (EDA)
+
+#### 1. How does the lead time for hotel bookings correlate with the number of children accompanying guests?
+
+To find data on a group of guests depending on booking time, I decided to create a scatter plot with lead time and children data.
+
+```{r Scatter plot}
+ggplot(data = hotel_bookings) +
+  geom_point(mapping = aes(x = lead_time, y = children)) +
+  labs(title="Relationship Between Booking Lead Time and Number of Children",
+       caption=paste0("Data from: 2015 - 2017 "),
+       x="Lead Time",
+       y="Number of Children")
+```
+
+The results clearly indicate that a smaller number of children accompanying guests corresponds to an increase in the lead time for hotel reservations.
+
+<br> 
+
+#### 2. Stakeholder wants to run a family-friendly promotion targeting key market segments. She wants to know which market segments generate the largest number of bookings, and where these bookings are made (city hotels or resort hotels).
+
+To get the most popular market segments and the hotel, I decided to create a bar chart showing each hotel type and market segment.
+
+```{r bar chart}
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = hotel, fill = market_segment)) +
+  labs(title="Comparison of Market Segments by Hotel Type",
+       caption=paste0("Data from: 2015 - 2017 "),
+       x="Hotel Type",
+       y="Number of Bookings")
+```
+<br> 
+
+According to the bar chart, I observed difficulty in accurately comparing the dimensions of the market segments located at the top of the bars. As a solution, I decided to create separate plots for each unique market segment.
+
+```{r faceting a plot}
+ggplot(data = hotel_bookings) +
+  geom_bar(mapping = aes(x = hotel)) +
+  facet_wrap(~market_segment) +
+  labs(title="Comparison of Market Segments by Hotel Type",
+       caption=paste0("Data from: 2015 - 2017 "),
+       x="Hotel Type",
+       y="Number of Bookings")
+```
+
+From this chart, it became evident that the Online Travel Agency (TA) represents the most substantial market segment, with the City Hotel recording the highest number of bookings.
+
+<span style="color:red">After considering all the data, your stakeholder decides to send the promotion to families that make online bookings for city hotels. The online segment is the fastest growing segment, and families tend to spend more at city hotels than other types of guests.</span>
+
+<br> 
+
+#### 3.Your stakeholder asks if you can create a plot that shows the relationship between lead time and guests traveling with children for online bookings at city hotels. This will give her a better idea of the specific timing for the promotion.
+
+I applied data filtering techniques to extract information pertaining specifically to the correlation between lead time and guests with children, exclusively within the dataset of the City Hotel.
+
+I used the `filter()` function to create a dataset that only includes the information of City Hotel and Online TA.
+
+```{r filtering a dataset to just city hotels that are online TA}
+onlineta_city_hotels <- filter(hotel_bookings, 
+                           (hotel=="City Hotel" & 
+                             hotel_bookings$market_segment=="Online TA"))
+```
+
+
+Viewing the first few rows and columns of the dataset of Online TA City Hotels
+
+```{r }
+head(onlineta_city_hotels)
+```
+
+In order to gain a deeper understanding of the connection between lead time and the count of children among our guests, I decided to generate a scatter plot.
+
+```{r creating a plot part two}
+ggplot(data = onlineta_city_hotels) +
+  geom_point(mapping = aes(x = lead_time, y = children)) +
+  labs(title="Booking Lead Time vs. Number of Children at City Hotel via Online TA",
+       caption=paste0("Data from: 2015 - 2017 "),
+       x="Lead Time",
+       y="Number of Children")
+```
+
+### Conclusion
+
+Expanding upon the previously applied filter, the presented scatter plot specifically represents data concerning online bookings made at city hotels. The plot illustrates a notable trend: bookings accompanied by children are associated with a notably shorter lead time, with bookings involving three children demonstrating a particularly significant trend of having lead times of less than 200 days. This insight suggests that promotions aimed at families can be strategically timed closer to the actual booking dates.
+
+
+
+
