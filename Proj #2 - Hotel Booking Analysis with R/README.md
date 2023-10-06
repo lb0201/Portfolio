@@ -4,7 +4,7 @@ September 2023
 
 ## Project Title
 
-Hotel Booking Analysis
+Hotel Promotion Optimization
 
 ## Description
 
