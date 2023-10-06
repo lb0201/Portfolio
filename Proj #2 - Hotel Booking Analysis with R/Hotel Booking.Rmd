@@ -1,5 +1,5 @@
 ---
-title: "Hotel Booking Analysis"
+title: "Hotel Promotion Optimization"
 author: "Brian Lim"
 date: "2023-09-25"
 output:
